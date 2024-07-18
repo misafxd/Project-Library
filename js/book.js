@@ -4,26 +4,31 @@ const form = document.querySelector(".form");
 
 const myLibrary = [];
 
+class Book {
+    constructor(title, author, pages){
+        this._title = title;
+        this._author = author;
+        this._pages = pages;
+        this._read = "not read yet";
+        this._id = myLibrary.length;
+    }
 
-function Book(title, author, pages){
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = "not read yet"
-    this.id = myLibrary.length;
-
-    this.changeReadStatus = function(){
-        if (this.read === "not read yet"){
-            this.read = "Already read";
+    changeReadStatus() {
+        if (this._read === "not read yet"){
+            this._read = "Already read";
         } else {
-            this.read = "not read yet";
+            this._read = "not read yet";
         }
-        
     }
 
-    this.info = function(){
-        return `${this.title} by ${this.author}, ${this.pages}, ${this.read}`
+    id(){
+        return this._id
     }
+
+    info() {
+        return `${this._title} by ${this._author}, ${this._pages} pages, ${this._read}`
+    }
+
 }
 
 function addBookToLibrary(title,author, pages){
@@ -52,7 +57,7 @@ function addButton(type, id){
 }
 
 function deleteBook(id) {
-    const bookIndex = myLibrary.findIndex(book => book.id === id);
+    const bookIndex = myLibrary.findIndex(book => book.id() === id);
     if (bookIndex !== -1) {
       const child = document.querySelector(`.book-${id}`);
       books.removeChild(child);
@@ -61,7 +66,7 @@ function deleteBook(id) {
   }
 
 function markRead(id){
-    const bookIndex = myLibrary.findIndex(book => book.id === id);
+    const bookIndex = myLibrary.findIndex(book => book.id() === id);
     myLibrary[bookIndex].changeReadStatus()
     showLibrary()
 }
@@ -72,12 +77,12 @@ function showLibrary(){
     }
     myLibrary.forEach(book =>{
         let bookDescription = document.createElement("div");
-        bookDescription.classList.add("book", `book-${book.id}`);
+        bookDescription.classList.add("book", `book-${book.id()}`);
         let newBook = document.createElement("p");
         newBook.textContent = book.info();
         bookDescription.appendChild(newBook);
-        bookDescription.appendChild(addButton("delete", book.id));
-        bookDescription.appendChild(addButton("mark-read", book.id));
+        bookDescription.appendChild(addButton("delete", book.id()));
+        bookDescription.appendChild(addButton("mark-read", book.id()));
         books.appendChild(bookDescription); 
     })
     
